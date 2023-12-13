@@ -1,16 +1,19 @@
 # RL_project_A67037
 
 
-본 코드는 코랩으로 작성된 것임을 말씀드립니다.
+본 코드는 코랩으로 작성된 것 임을 알려드립니다.
 
 
 파일 하나로 작성되었으므로 따로 조정없이 실행하시면 됩니다. 
 
 
-환경 및 결과에 대한 자세한 설명은 보고서 통하여 확인하실 수 있습니다.
+**환경 및 결과에 대한 자세한 설명은 보고서 통하여 확인하실 수 있습니다.**
 
 
-#1. 함수 Import
+감사합니다.
+
+
+# 1. 함수 Import
 
 ```python
 import gym
@@ -20,7 +23,7 @@ import random
 import matplotlib.pyplot as plt
 ```
 
-#2. 환경 생성 & Hyperparameters 설정
+# 2. 환경 생성 & Hyperparameters 설정
 
 ```python
 env = gym.make('Taxi-v3')
@@ -92,13 +95,15 @@ def calculate_statistics(rewards):
     return {'Mean': mean_reward, 'Median': median_reward, 'Max': max_reward, 'Min': min_reward, 'Std': std_reward}
 ```
 
-#4. 실행
+
+# 4. 실행
 ```python
 rewards_case1 = q_learning(env, alpha, gamma, epsilon, num_episodes=1000) #Q learning with no epsilon
 rewards_case2 = q_learning(env, alpha, gamma, 0.1, num_episodes=1000) # epsilon-greedy
 rewards_case3 = q_learning(env, alpha, gamma, 1.0, epsilon_decay, num_episodes=1000) # epsilon-greedy with decay
 ```
-#5 시각화
+
+# 5 시각화
 ```python!
 
 plt.figure(figsize=(12, 6))
@@ -108,7 +113,7 @@ plot_rewards(rewards_case3, "Case 3: Epsilon-Greedy")
 plt.show()
 ```
 
-#6. 각 케이스별 통계 계산 및 출력
+# 6. 각 케이스별 통계 계산 및 출력
 ```python
 stats_case1 = calculate_statistics(rewards_case1)
 stats_case2 = calculate_statistics(rewards_case2)
