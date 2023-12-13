@@ -6,7 +6,7 @@
 
 #1. 함수 Import
 
-```　python
+```python
 import gym
 import numpy as np
 import pandas as pd
@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 
 2. 환경 생성 & Hyperparameters 설정
 
-```　python
+```python
 env = gym.make('Taxi-v3')
 
 alpha = 0.1 #Alpha (α) - 학습률(Learning Rate)
@@ -28,6 +28,7 @@ epsilon_end = 0.01 #epsilon-greedy 에서 마지막 값
 
 # 3. 함수 정의
 **3-1) Q-Learning 함수 정의**
+```python
 def q_learning(env, alpha, gamma, epsilon, epsilon_decay=0, num_episodes=1000):
     q_table = np.zeros([env.observation_space.n, env.action_space.n])
     total_rewards = []
@@ -60,17 +61,21 @@ def q_learning(env, alpha, gamma, epsilon, epsilon_decay=0, num_episodes=1000):
         total_rewards.append(total_reward)
 
     return total_rewards
+```
 
-
-# 3-2) 시각화 함수
+**3-2) 시각화 함수**
+```python
 def plot_rewards(rewards, title):
     plt.plot(rewards, label=title)
     plt.xlabel('Episode')
     plt.ylabel('Total Reward')
     plt.title('Total Rewards Over Episodes')
     plt.legend()
+```
 
-# 3-3) 통계값 리턴 함수
+**3-3) 통계값 리턴 함수**
+
+```python
 def calculate_statistics(rewards):
     mean_reward = np.mean(rewards)
     median_reward = np.median(rewards)
@@ -79,3 +84,30 @@ def calculate_statistics(rewards):
     std_reward = np.std(rewards)
 
     return {'Mean': mean_reward, 'Median': median_reward, 'Max': max_reward, 'Min': min_reward, 'Std': std_reward}
+```
+
+**4. 실행**
+```python
+rewards_case1 = q_learning(env, alpha, gamma, epsilon, num_episodes=1000) #Q learning with no epsilon
+rewards_case2 = q_learning(env, alpha, gamma, 0.1, num_episodes=1000) # epsilon-greedy
+rewards_case3 = q_learning(env, alpha, gamma, 1.0, epsilon_decay, num_episodes=1000) # epsilon-greedy with decay
+```
+
+**5 시각화**
+```python
+plt.figure(figsize=(12, 6))
+plot_rewards(rewards_case1, "Case 1: Epsilon = 0")
+plot_rewards(rewards_case2, "Case 2: Epsilon = 0.1")
+plot_rewards(rewards_case3, "Case 3: Epsilon-Greedy")
+plt.show()
+```
+
+**6. 각 케이스별 통계 계산 및 출력**
+```python
+stats_case1 = calculate_statistics(rewards_case1)
+stats_case2 = calculate_statistics(rewards_case2)
+stats_case3 = calculate_statistics(rewards_case3)
+
+df_stats = pd.DataFrame([stats_case1, stats_case2, stats_case3], index=["Case 1", "Case 2", "Case 3"])
+print(df_stats)
+```
