@@ -98,9 +98,9 @@ rewards_case1 = q_learning(env, alpha, gamma, epsilon, num_episodes=1000) #Q lea
 rewards_case2 = q_learning(env, alpha, gamma, 0.1, num_episodes=1000) # epsilon-greedy
 rewards_case3 = q_learning(env, alpha, gamma, 1.0, epsilon_decay, num_episodes=1000) # epsilon-greedy with decay
 ```
-
 **5 시각화**
-```python
+```python!
+
 plt.figure(figsize=(12, 6))
 plot_rewards(rewards_case1, "Case 1: Epsilon = 0")
 plot_rewards(rewards_case2, "Case 2: Epsilon = 0.1")
