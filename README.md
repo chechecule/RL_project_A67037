@@ -1,17 +1,81 @@
 # RL_project_A67037
 본 코드는 코랩으로 작성된 것임을 말씀드립니다.
+파일 하나로 작성되었으므로 따로 설명없이 실행하시면 됩니다. 
+변수명 및 결과에 대한 자세한 설명은 보고서 통하여 작성하였습니다.
 
-# 1. 함수 Import
 
+#1. 함수 Import
+
+```　python
 import gym
-
 import numpy as np
-
 import pandas as pd
-
 import random
-
 import matplotlib.pyplot as plt
+```
+
+2. 환경 생성 & Hyperparameters 설정
+
+```　python
+env = gym.make('Taxi-v3')
+
+alpha = 0.1 #Alpha (α) - 학습률(Learning Rate)
+gamma = 0.9 # Gamma (γ) - 할인 계수(Discount Factor)
+epsilon = 0.0  # 항상 최적의 행동 선택
+epsilon_decay = 0.99  # epsilon-greedy 전략에서 사용
+epsilon_end = 0.01 #epsilon-greedy 에서 마지막 값
+```
+
+# 3. 함수 정의
+**3-1) Q-Learning 함수 정의**
+def q_learning(env, alpha, gamma, epsilon, epsilon_decay=0, num_episodes=1000):
+    q_table = np.zeros([env.observation_space.n, env.action_space.n])
+    total_rewards = []
+
+    for i in range(num_episodes):
+        state = env.reset()
+        done = False
+        total_reward = 0
+
+        while not done:
+            if random.uniform(0, 1) < epsilon:
+                action = env.action_space.sample()  # 무작위 행동
+            else:
+                action = np.argmax(q_table[state])  # 최적의 행동 선택
+
+            next_state, reward, done, _ = env.step(action)
+            total_reward += reward
+
+            old_value = q_table[state, action]
+            next_max = np.max(q_table[next_state])
+            new_value = (1 - alpha) * old_value + alpha * (reward + gamma * next_max)
+            q_table[state, action] = new_value
+
+            state = next_state
+
+            # Epsilon 감소
+            if epsilon_decay != 0:
+                epsilon = max(epsilon_end, epsilon * epsilon_decay)
+
+        total_rewards.append(total_reward)
+
+    return total_rewards
 
 
+# 3-2) 시각화 함수
+def plot_rewards(rewards, title):
+    plt.plot(rewards, label=title)
+    plt.xlabel('Episode')
+    plt.ylabel('Total Reward')
+    plt.title('Total Rewards Over Episodes')
+    plt.legend()
 
+# 3-3) 통계값 리턴 함수
+def calculate_statistics(rewards):
+    mean_reward = np.mean(rewards)
+    median_reward = np.median(rewards)
+    max_reward = np.max(rewards)
+    min_reward = np.min(rewards)
+    std_reward = np.std(rewards)
+
+    return {'Mean': mean_reward, 'Median': median_reward, 'Max': max_reward, 'Min': min_reward, 'Std': std_reward}
